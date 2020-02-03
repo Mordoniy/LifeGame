@@ -849,6 +849,22 @@ public static class Simple
         return new Vector3(vector2.x, vector2.y, 0);
     }
 
+    public static List<Vector2> ToVector2List(this List<Vector3> list)
+    {
+        List<Vector2> newList = new List<Vector2>();
+        foreach (Vector3 vector in list)
+            newList.Add(vector);
+        return newList;
+    }
+
+    public static List<Vector3> ToVector3List(this List<Vector2> list)
+    {
+        List<Vector3> newList = new List<Vector3>();
+        foreach (Vector2 vector in list)
+            newList.Add(vector);
+        return newList;
+    }
+
     public static Vector2Int ToVector2Int(this Vector2 vector2)
     {
         return new Vector2Int(Mathf.RoundToInt(vector2.x), Mathf.RoundToInt(vector2.y));

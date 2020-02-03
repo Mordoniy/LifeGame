@@ -7,6 +7,7 @@ public class Menu : MonoBehaviour
 {
     public TMP_InputField widthField, heightField;
     public TextMeshProUGUI annotation;
+    public GameObject menuObj;
     float minSize = 10, maxSize = 100;
 
     void Start()
@@ -39,6 +40,7 @@ public class Menu : MonoBehaviour
         }
 
         GameManager.Instance.field.SetBorder(width, height);
+        menuObj.SetActive(false);
     }
 
     void IncorrectInput()

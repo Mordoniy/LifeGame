@@ -14,9 +14,21 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+        BuilderFigures.OnFigureCreate += OnCreateFigure;
+        Figure.OnFigureDeath += OnFigureDeath;
     }
 
     void Update()
+    {
+
+    }
+
+    void OnCreateFigure(Figure figure)
+    {
+
+    }
+
+    void OnFigureDeath(Figure figure)
     {
 
     }
