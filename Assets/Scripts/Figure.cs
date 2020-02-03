@@ -12,10 +12,10 @@ public enum FigureBehavior
 
 public class Figure : MonoBehaviour
 {
-    public static event System.Action<Figure> OnFigureDeath;
+    public static event System.Action<Figure, Figure> OnFigureCollision;
 
     const float timeChangeDir = 10;
-    const float speed = 3;
+    const float speed = 5;
     const float speedRotate = 30;
 
     public FigureBehavior behavior;
@@ -111,9 +111,30 @@ public class Figure : MonoBehaviour
         Figure neighbour = collision.gameObject.GetComponent<Figure>();
         if (neighbour)
         {
-            Debug.Log(this,this);
+            GetComponent<Collider2D>().enabled = false;
             Destroy(gameObject);
-            OnFigureDeath?.Invoke(this);
+            OnFigureCollision?.Invoke(this, neighbour);
+        }
+        else
+        {
+            float angleNormal = Simple.GetAngle(collision.contacts[0].normal);
+            float currentAngle = 0;
+            float delta = 0;
+            int sch = 0;
+            do
+            {
+                ChangeDir();
+                currentAngle = Simple.GetAngle(dir);
+                delta = angleNormal - currentAngle;
+                sch++;
+                if (sch > 100)
+                {
+                    Debug.LogError("Неправильное направление: " + name);
+                    break;
+                }
+            } while (delta > 90 || delta < -90);
+            if (behavior == FigureBehavior.RandomDirTime)
+                currentTimeChangeDir = timeChangeDir;
         }
     }
 }

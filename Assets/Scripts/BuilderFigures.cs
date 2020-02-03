@@ -22,7 +22,7 @@ public static class BuilderFigures
         figure.angleCount = angleCount;
         List<Vector2> points = new List<Vector2>();
         for (int i = 0; i < angleCount; i++)
-            points.Add(Simple.GetVector2Angle(i * (360 / angleCount)) * sizeFigure / 2);
+            points.Add(Simple.GetVector2Angle(i * (360f / angleCount)) * sizeFigure / 2);
         LineRenderer line = figure.GetComponent<LineRenderer>();
         line.positionCount = angleCount;
         line.SetPositions(points.ToVector3List().ToArray());
@@ -34,6 +34,7 @@ public static class BuilderFigures
         }
         figure.GetComponent<PolygonCollider2D>().points = points.ToArray();
         figure.Angle = Random.Range(0, 360);
+        figure.name = "Figure №" + GameManager.Instance.figures.Count;
 
         OnFigureCreate?.Invoke(figure);
         return figure;

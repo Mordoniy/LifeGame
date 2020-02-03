@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public Slider timeScaleSlider;
     public List<Figure> figures;
     public Field field;
 
@@ -13,7 +15,7 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         BuilderFigures.OnFigureCreate += OnCreateFigure;
-        Figure.OnFigureDeath += OnFigureDeath;
+        Figure.OnFigureCollision += OnFigureCollision;
     }
 
     void Update()
@@ -26,9 +28,14 @@ public class GameManager : MonoBehaviour
         figures.Add(figure);
     }
 
-    void OnFigureDeath(Figure figure)
+    void OnFigureCollision(Figure a, Figure b)
     {
-        figures.Remove(figure);
+        if (figures.Contains(a) && figures.Contains(b))
+        {
+            figures.Remove(a);
+            figures.Remove(b);
+            BuilderFigures.CreateFigure(a.angleCount + b.angleCount, (a.transform.position + b.transform.position) / 2);
+        }
     }
 
     public Figure GetNeighbourFigure(Figure current)
@@ -54,9 +61,24 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < 1000; i++)
         {
             position = new Vector2(Random.Range(-field.width / 2, field.width / 2), Random.Range(-field.height / 2, field.height / 2));
-            if (!Physics2D.OverlapCircle(position, BuilderFigures.sizeFigure))
+            if (CheckEmptyPosition(position))
                 break;
         }
         return position;
     }
+
+    public bool CheckEmptyPosition(Vector2 position)
+    {
+        return !Physics2D.OverlapCircle(position, BuilderFigures.sizeFigure);
+    }
+
+    #region UI
+
+    public void ChangeTimeScale()
+    {
+        Time.timeScale = timeScaleSlider.value;
+    }
+
+    #endregion
+
 }
