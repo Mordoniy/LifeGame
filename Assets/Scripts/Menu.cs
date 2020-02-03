@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Menu : MonoBehaviour
 {
-    public TMP_InputField widthField, heightField;
-    public TextMeshProUGUI annotation;
-    public GameObject menuObj;
-    float minSize = 10, maxSize = 100;
+    public Slider[] percents;
+    //public TMP_InputField widthField, heightField;
+    //public TextMeshProUGUI annotation;
+    //float minSize = 10, maxSize = 100;
 
     void Start()
     {
@@ -22,30 +24,42 @@ public class Menu : MonoBehaviour
 
     public void Play()
     {
-        float width = 0, height = 0;
-        if (!float.TryParse(widthField.text, out width) || !float.TryParse(heightField.text, out height))
-        {
-            IncorrectInput();
-            return;
-        }
-        if (width < minSize || width > maxSize || height < minSize || height > maxSize)
-        {
-            IncorrectInput();
-            return;
-        }
-        if (width / height > 2 || height / width > 2)
-        {
-            IncorrectInput();
-            return;
-        }
+        //float width = 0, height = 0;
+        //if (!float.TryParse(widthField.text, out width) || !float.TryParse(heightField.text, out height))
+        //{
+        //    IncorrectInput();
+        //    return;
+        //}
+        //if (width < minSize || width > maxSize || height < minSize || height > maxSize)
+        //{
+        //    IncorrectInput();
+        //    return;
+        //}
+        //if (width / height > 2 || height / width > 2)
+        //{
+        //    IncorrectInput();
+        //    return;
+        //}
 
-        GameManager.Instance.field.SetBorder(width, height);
-        menuObj.SetActive(false);
+        GameManager.Instance.field.SetBorder(32, 18);
+        GameManager.Instance.Play();
+        gameObject.SetActive(false);
     }
 
-    void IncorrectInput()
+    //void IncorrectInput()
+    //{
+    //    annotation.color = Color.red;
+    //    annotation.SmoothlyColor(Color.white, 1, 1);
+    //}
+
+    public void ChangePercent(int index)
     {
-        annotation.color = Color.red;
-        annotation.SmoothlyColor(Color.white, 1, 1);
+        if (EventSystem.current.currentSelectedGameObject == percents[index].gameObject)
+        {
+            BuilderFigures.ChangePercent(index, percents[index].value);
+            for (int i = 0; i < percents.Length; i++)
+                if (i != index)
+                    percents[i].value = BuilderFigures.percentBehavior[i];
+        }
     }
 }

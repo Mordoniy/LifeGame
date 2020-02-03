@@ -38,6 +38,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Play()
+    {
+
+    }
+
     public Figure GetNeighbourFigure(Figure current)
     {
         float minDistance = float.MaxValue;

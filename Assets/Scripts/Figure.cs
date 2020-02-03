@@ -15,7 +15,7 @@ public class Figure : MonoBehaviour
     public static event System.Action<Figure, Figure> OnFigureCollision;
 
     const float timeChangeDir = 10;
-    const float speed = 5;
+    const float speed = 3;
     const float speedRotate = 30;
 
     public FigureBehavior behavior;
@@ -62,7 +62,7 @@ public class Figure : MonoBehaviour
             }
         }
         if (behavior != FigureBehavior.Idle)
-            transform.position += dir.normalized * Time.deltaTime;
+            transform.position += dir.normalized * speed * Time.deltaTime;
         if (behavior == FigureBehavior.Agressive)
         {
             if (!target)
@@ -72,13 +72,15 @@ public class Figure : MonoBehaviour
                 float targetAngle = Simple.GetAngle(target.transform.position - transform.position);
                 for (int i = 0; i < angleCount; i++)
                 {
-                    float currentAngle = Angle + (i + .5f) * (360 / angleCount);
+                    float currentAngle = Angle + (i + .5f) * (360f / angleCount);
                     if (currentAngle > 360)
                         currentAngle -= 360;
                     else if (currentAngle < 0)
                         currentAngle += 360;
 
-                    if (Mathf.Abs(targetAngle - currentAngle) < 360 / angleCount / 2)
+                    float delat = Mathf.Abs(targetAngle - currentAngle);
+
+                    if (delat < 360f / angleCount / 2 || Mathf.Abs(360 - delat) < 360f / angleCount / 2)
                     {
                         if (Mathf.Abs(targetAngle - currentAngle) > speedRotate * Time.deltaTime)
                             if (currentAngle > targetAngle)
@@ -86,7 +88,7 @@ public class Figure : MonoBehaviour
                             else Angle += speedRotate * Time.deltaTime;
                         else if (Mathf.Abs(targetAngle - currentAngle) != 0)
                             Angle += targetAngle - currentAngle;
-                        dir = Simple.GetVector2Angle((i + .5f) * (360 / angleCount) + Angle);
+                        dir = Simple.GetVector2Angle((i + .5f) * (360f / angleCount) + Angle);
                     }
                 }
             }
@@ -97,7 +99,7 @@ public class Figure : MonoBehaviour
     {
         Vector3 newDir = dir;
         while (dir == newDir)
-            newDir = Simple.GetVector2Angle((Random.Range(0, angleCount) + .5f) * (360 / angleCount) + Angle);
+            newDir = Simple.GetVector2Angle((Random.Range(0, angleCount) + .5f) * (360f / angleCount) + Angle);
         dir = newDir;
     }
 

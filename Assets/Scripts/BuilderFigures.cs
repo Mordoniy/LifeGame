@@ -12,6 +12,8 @@ public static class BuilderFigures
         Color.yellow,
         Color.red,
     };
+
+    public static float[] percentBehavior = new float[] { 25, 25, 25, 25 };
     public const float sizeFigure = 1;
 
     public static Figure CreateFigure(int angleCount, FigureBehavior behavior, Vector2 position)
@@ -33,7 +35,7 @@ public static class BuilderFigures
             points.Add(new Vector2(points[0].x, .05f));
         }
         figure.GetComponent<PolygonCollider2D>().points = points.ToArray();
-        figure.Angle = Random.Range(0, 360);
+        figure.Angle = Random.Range(0, 360f);
         figure.name = "Figure №" + GameManager.Instance.figures.Count;
 
         OnFigureCreate?.Invoke(figure);
@@ -42,16 +44,41 @@ public static class BuilderFigures
 
     public static Figure CreateFigure(int angleCount, Vector2 position)
     {
-        return CreateFigure(angleCount, (FigureBehavior)Random.Range(0, 4), position);
+        return CreateFigure(angleCount, GetRandomBehavior(), position);
     }
 
     public static Figure CreateFigure(int angleCount)
     {
-        return CreateFigure(angleCount, (FigureBehavior)Random.Range(0, 4), GameManager.Instance.GetEmptyPosition());
+        return CreateFigure(angleCount, GetRandomBehavior(), GameManager.Instance.GetEmptyPosition());
     }
 
     public static Figure CreateFigure()
     {
-        return CreateFigure(Random.Range(2, 6), (FigureBehavior)Random.Range(0, 4), GameManager.Instance.GetEmptyPosition());
+        return CreateFigure(Random.Range(2, 6), GetRandomBehavior(), GameManager.Instance.GetEmptyPosition());
+    }
+
+    public static FigureBehavior GetRandomBehavior()
+    {
+        float value = Random.Range(0, 100);
+        for (int i = 0; i < percentBehavior.Length; i++)
+        {
+            value -= percentBehavior[i];
+            if (value <= 0)
+                return (FigureBehavior)i;
+        }
+        return (FigureBehavior)percentBehavior.Length - 1;
+    }
+
+    public static void ChangePercent(int index, float value)
+    {
+        float delta = value - percentBehavior[index];
+        percentBehavior[index] = value;
+        float sum = 0;
+        for (int i = 0; i < percentBehavior.Length; i++)
+            if (i != index)
+                sum += percentBehavior[i];
+        for (int i = 0; i < percentBehavior.Length; i++)
+            if (i != index)
+                percentBehavior[i] -= delta * (percentBehavior[i] / sum);
     }
 }
