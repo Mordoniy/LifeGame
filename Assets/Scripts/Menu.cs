@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 
 public class Menu : MonoBehaviour
 {
+    public TextMeshProUGUI enterCount;
+    public TMP_InputField countField;
     public Slider[] percents;
     //public TMP_InputField widthField, heightField;
     //public TextMeshProUGUI annotation;
@@ -41,9 +43,17 @@ public class Menu : MonoBehaviour
         //    return;
         //}
 
-        GameManager.Instance.field.SetBorder(32, 18);
-        GameManager.Instance.Play();
-        gameObject.SetActive(false);
+        if (int.TryParse(countField.text, out int count))
+        {
+            GameManager.Instance.field.SetBorder(32, 18);
+            GameManager.Instance.Play(count);
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            enterCount.color = Color.red;
+            Simple.StartMethodDelay(() => enterCount.SmoothlyAlpha(0, .5f), 2);
+        }
     }
 
     //void IncorrectInput()

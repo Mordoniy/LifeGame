@@ -30,7 +30,5 @@ public class Field : MonoBehaviour
         right.transform.localScale = left.transform.localScale = new Vector3(1, height, 1);
         cam.orthographicSize = Mathf.Max(height / 2, width / 2 * Screen.height / Screen.width);
         gameObject.SetActive(true);
-        for (int i = 0; i < 20; i++)
-            BuilderFigures.CreateFigure();
     }
 }

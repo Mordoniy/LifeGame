@@ -18,11 +18,7 @@ public class GameManager : MonoBehaviour
         Figure.OnFigureCollision += OnFigureCollision;
     }
 
-    void Update()
-    {
-
-    }
-
+    //События при создании и столкновнеии фигур
     void OnCreateFigure(Figure figure)
     {
         figures.Add(figure);
@@ -38,17 +34,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Play()
+    public void Play(int count)
     {
-
+        for (int i = 0; i < count; i++)
+            BuilderFigures.CreateFigure();
     }
 
+    /// <summary>
+    /// Получаем ближайшую фигуру
+    /// </summary>
+    /// <param name="current"></param>
+    /// <returns></returns>
     public Figure GetNeighbourFigure(Figure current)
     {
         float minDistance = float.MaxValue;
         Figure neighbour = null;
         foreach (Figure figure in figures)
-            if (figure != current)
+            if (figure && figure != current)
             {
                 float distance = (current.transform.position - figure.transform.position).magnitude;
                 if (distance < minDistance)
@@ -60,6 +62,10 @@ public class GameManager : MonoBehaviour
         return neighbour;
     }
 
+    /// <summary>
+    /// Поиск пустого места, если такого нет - выдает случайное
+    /// </summary>
+    /// <returns></returns>
     public Vector2 GetEmptyPosition()
     {
         Vector2 position = new Vector2();
@@ -72,6 +78,11 @@ public class GameManager : MonoBehaviour
         return position;
     }
 
+    /// <summary>
+    /// Проверяем пустует ли место
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public bool CheckEmptyPosition(Vector2 position)
     {
         return !Physics2D.OverlapCircle(position, BuilderFigures.sizeFigure);

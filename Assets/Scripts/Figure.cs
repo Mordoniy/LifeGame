@@ -14,7 +14,7 @@ public class Figure : MonoBehaviour
 {
     public static event System.Action<Figure, Figure> OnFigureCollision;
 
-    const float timeChangeDir = 10;
+    const float timeChangeDir = 3;
     const float speed = 3;
     const float speedRotate = 30;
 
@@ -52,7 +52,7 @@ public class Figure : MonoBehaviour
 
     void Update()
     {
-        if (behavior == FigureBehavior.RandomDirTime)
+        if (behavior == FigureBehavior.RandomDirTime)//Отсчет времени для непостоянных
         {
             currentTimeChangeDir -= Time.deltaTime;
             if (currentTimeChangeDir < 0)
@@ -61,16 +61,16 @@ public class Figure : MonoBehaviour
                 currentTimeChangeDir = timeChangeDir;
             }
         }
-        if (behavior != FigureBehavior.Idle)
+        if (behavior != FigureBehavior.Idle)//Движение если не отдыхает
             transform.position += dir.normalized * speed * Time.deltaTime;
         if (behavior == FigureBehavior.Agressive)
         {
-            if (!target)
+            if (!target)//Выбор цели, если текущую съели
                 SelectTarget();
             if (target)
             {
-                float targetAngle = Simple.GetAngle(target.transform.position - transform.position);
-                for (int i = 0; i < angleCount; i++)
+                float targetAngle = Simple.GetAngle(target.transform.position - transform.position);//Определение необхдимого угла
+                for (int i = 0; i < angleCount; i++)//и поворот до него
                 {
                     float currentAngle = Angle + (i + .5f) * (360f / angleCount);
                     if (currentAngle > 360)
@@ -79,7 +79,6 @@ public class Figure : MonoBehaviour
                         currentAngle += 360;
 
                     float delat = Mathf.Abs(targetAngle - currentAngle);
-
                     if (delat < 360f / angleCount / 2 || Mathf.Abs(360 - delat) < 360f / angleCount / 2)
                     {
                         if (Mathf.Abs(targetAngle - currentAngle) > speedRotate * Time.deltaTime)
@@ -111,19 +110,19 @@ public class Figure : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         Figure neighbour = collision.gameObject.GetComponent<Figure>();
-        if (neighbour)
+        if (neighbour)//Столкновение с другим жителем
         {
             GetComponent<Collider2D>().enabled = false;
             Destroy(gameObject);
             OnFigureCollision?.Invoke(this, neighbour);
         }
-        else
+        else//Столкновение с препядствием
         {
             float angleNormal = Simple.GetAngle(collision.contacts[0].normal);
             float currentAngle = 0;
             float delta = 0;
             int sch = 0;
-            do
+            do//Выбираем другой угол если выбран поворот при котором можем уйти в стену
             {
                 ChangeDir();
                 currentAngle = Simple.GetAngle(dir);
