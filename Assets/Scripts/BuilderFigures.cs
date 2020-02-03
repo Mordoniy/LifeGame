@@ -12,7 +12,7 @@ public static class BuilderFigures
         Color.yellow,
         Color.red,
     };
-    static float sizeFigure = 1;
+    public const float sizeFigure = 1;
 
     public static Figure CreateFigure(int angleCount, FigureBehavior behavior, Vector2 position)
     {
@@ -27,7 +27,13 @@ public static class BuilderFigures
         line.positionCount = angleCount;
         line.SetPositions(points.ToVector3List().ToArray());
         line.startColor = line.endColor = colors[(int)behavior];
+        if (points.Count == 2)
+        {
+            points.Add(new Vector2(points[1].x, .05f));
+            points.Add(new Vector2(points[0].x, .05f));
+        }
         figure.GetComponent<PolygonCollider2D>().points = points.ToArray();
+        figure.Angle = Random.Range(0, 360);
 
         OnFigureCreate?.Invoke(figure);
         return figure;
@@ -40,16 +46,11 @@ public static class BuilderFigures
 
     public static Figure CreateFigure(int angleCount)
     {
-        return CreateFigure(angleCount, (FigureBehavior)Random.Range(0, 4), GetEmptyPosition());
+        return CreateFigure(angleCount, (FigureBehavior)Random.Range(0, 4), GameManager.Instance.GetEmptyPosition());
     }
 
     public static Figure CreateFigure()
     {
-        return CreateFigure(Random.Range(2, 6), (FigureBehavior)Random.Range(0, 4), GetEmptyPosition());
-    }
-
-    public static Vector2 GetEmptyPosition()
-    {
-        return new Vector2();
+        return CreateFigure(Random.Range(2, 6), (FigureBehavior)Random.Range(0, 4), GameManager.Instance.GetEmptyPosition());
     }
 }

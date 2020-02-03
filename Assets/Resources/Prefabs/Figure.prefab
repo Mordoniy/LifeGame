@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2280895057012279808}
   - component: {fileID: 1865139632661625312}
   - component: {fileID: 5783931318502064325}
+  - component: {fileID: -7469695308679697096}
   m_Layer: 0
   m_Name: Figure
   m_TagString: Untagged
@@ -139,7 +140,7 @@ LineRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 1
+  m_UseWorldSpace: 0
   m_Loop: 1
 --- !u!60 &5783931318502064325
 PolygonCollider2D:
@@ -171,3 +172,24 @@ PolygonCollider2D:
       - {x: -0.5877852, y: -0.80901706}
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
+--- !u!50 &-7469695308679697096
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865139632661625313}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
