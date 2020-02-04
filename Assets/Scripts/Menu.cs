@@ -45,7 +45,7 @@ public class Menu : MonoBehaviour
 
         if (int.TryParse(countField.text, out int count))
         {
-            GameManager.Instance.field.SetBorder(32, 18);
+            GameManager.Instance.field.SetBorder(64, 36);
             GameManager.Instance.Play(count);
             gameObject.SetActive(false);
         }
@@ -66,10 +66,10 @@ public class Menu : MonoBehaviour
     {
         if (EventSystem.current.currentSelectedGameObject == percents[index].gameObject)
         {
-            BuilderFigures.ChangePercent(index, percents[index].value);
+            BuilderSettings.ChangePercent(index, percents[index].value);
             for (int i = 0; i < percents.Length; i++)
                 if (i != index)
-                    percents[i].value = BuilderFigures.percentBehavior[i];
+                    percents[i].value = BuilderSettings.percentBehavior[i];
         }
     }
 }
